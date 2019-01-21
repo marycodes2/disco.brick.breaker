@@ -13,6 +13,7 @@ var color = "rgba(0, 149, 221, 1)"
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width-paddleWidth)/2;
+var paddleColor = "rgba(0, 149, 221, 1)"
 
 // Keypad pressed characteristics
 var rightPressed = false;
@@ -26,6 +27,7 @@ var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
+var brickColor = "rgba(0, 149, 221, 1)"
 
 // Keep track of score
 var score = 0;
@@ -53,7 +55,7 @@ function drawBricks() {
             bricks[c][r].y = brickY;
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "#0095DD";
+            ctx.fillStyle = brickColor
             ctx.fill();
             ctx.closePath();
           }
@@ -74,7 +76,7 @@ function drawBall() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = paddleColor;
     ctx.fill();
     ctx.closePath();
 }
@@ -82,14 +84,14 @@ function drawPaddle() {
 // Draw score on canvas
 function drawScore() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = randRGBA()
     ctx.fillText("Score: "+score, 8, 20);
 }
 
 // draw lives on canvas
 function drawLives() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = randRGBA()
     ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
 
@@ -98,9 +100,9 @@ function randNum() {
   return parseInt(Math.random()*255)
 }
 
-// redefine color -> executed every time the ball bounces off the wall
+// redefine color
 function randRGBA() {
-  color = `rgba(${randNum()}, ${randNum()}, ${randNum()}, 1)`
+  return `rgba(${randNum()}, ${randNum()}, ${randNum()}, 1)`
 }
 
 
@@ -117,21 +119,23 @@ function draw() {
   // Changes x direction of the ball when it hits left or right of canvas
   if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
     dx = -dx;
-    randRGBA()
+    color = randRGBA()
   }
 
   // Changes y direction of the ball when it hits top or bottom of canvas
   if(y + dy < ballRadius) {
     dy = -dy;
-    randRGBA()
+    color = randRGBA()
   }
   // removes life if ball hits bottom on canvas
   else if (y + dy > canvas.height-ballRadius) {
+    // responds to ball hitting paddle
     if(x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy
-      randRGBA()
+      color = randRGBA()
       dy *= 1.1
       dx *= 1.1
+      paddleColor = randRGBA()
     }
     else {
       lives--;
@@ -142,8 +146,8 @@ function draw() {
       else {
         x = canvas.width/2;
         y = canvas.height-30;
-        dx = 2;
-        dy = -2;
+        dx = 4;
+        dy = -4;
         paddleX = (canvas.width-paddleWidth)/2;
       }
     }
@@ -173,7 +177,8 @@ function collisionDetection() {
                 dy = -dy;
                 b.status = 0
                 score++
-                randRGBA()
+                brickColor = randRGBA()
+                color = randRGBA()
                 if(score == brickRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         document.location.reload();
