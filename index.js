@@ -4,8 +4,8 @@ var ctx = canvas.getContext("2d");
 // Ball characteristics
 var x = canvas.width/2;
 var y = canvas.height/2;
-var dx = -2;
-var dy = -2
+var dx = -3;
+var dy = -3
 var ballRadius = 10;
 var color = "rgba(0, 149, 221, 1)"
 
@@ -21,7 +21,7 @@ var leftPressed = false;
 
 // Brick characteristics
 var brickRowCount = 5;
-var brickColumnCount = 3;
+var brickColumnCount = 5;
 var brickWidth = 75;
 var brickHeight = 20;
 var brickPadding = 10;
@@ -84,14 +84,14 @@ function drawPaddle() {
 // Draw score on canvas
 function drawScore() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = randRGBA()
+    ctx.fillStyle = color
     ctx.fillText("Score: "+score, 8, 20);
 }
 
 // draw lives on canvas
 function drawLives() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = randRGBA()
+    ctx.fillStyle = color
     ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
 
@@ -115,6 +115,11 @@ function draw() {
   drawScore();
   drawLives()
   collisionDetection()
+
+  // last brick flashes color
+  if(score == brickRowCount*brickColumnCount - 1) {
+    brickColor = randRGBA()
+  }
 
   // Changes x direction of the ball when it hits left or right of canvas
   if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
@@ -146,8 +151,8 @@ function draw() {
       else {
         x = canvas.width/2;
         y = canvas.height-30;
-        dx = 4;
-        dy = -4;
+        dx = 4.5;
+        dy = -4.5;
         paddleX = (canvas.width-paddleWidth)/2;
       }
     }
