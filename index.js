@@ -33,7 +33,7 @@ var brickColor = "rgba(0, 149, 221, 1)"
 var score = 0;
 
 // Keep track of lives
-var lives = 3;
+var lives = 1;
 
 // Draw the bricks array with (0,0) x,y coordinates
 var bricks = [];
